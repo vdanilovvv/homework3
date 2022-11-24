@@ -1,6 +1,4 @@
-
 package ru.otus.petstore;
-
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.*;
@@ -20,6 +18,4 @@ public class UserDTO {
     private String phone;
     private long userStatus;
     private String username;
-
-
 }

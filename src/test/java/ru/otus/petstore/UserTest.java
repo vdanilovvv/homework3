@@ -1,40 +1,44 @@
 package ru.otus.petstore;
 
 import io.restassured.response.Response;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import static ru.otus.petstore.UserUtils.userDTO;
-
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UserTest {
 
 
     @Test
-    @Order(0)
     public void testCreateUser() {
-        UserUtils.postUser(userDTO());
+        UserDTO user = UserUtils.userDTO();
+        UserQueries.postUser(user, 200);
+        Response response = UserQueries.getUser(user.getUsername(), 200);
+        Assertions.assertEquals(response.getBody().as(UserDTO.class), user);
+        UserQueries.deleteUser(user.getUsername(), 200);
+        UserQueries.getUser(user.getUsername(), 404);
+
     }
 
     @Test
-    @Order(1)
-    public void testCreateUserResponse() {
-        Response response = UserUtils.postUser(userDTO());
-        Assertions.assertEquals(response.jsonPath().getInt("code"), 200);
-        Assertions.assertInstanceOf(String.class, response.jsonPath().get("message"));
+    public void testUpdateUser() {
+        UserDTO user1 = UserUtils.userDTO();
+        UserQueries.postUser(user1, 200);
+        UserDTO user2 = UserUtils.userDTO();
+        UserQueries.updateUser(user1.getUsername(), user2, 200);
+        Response response = UserQueries.getUser(user2.getUsername(), 200);
+        Assertions.assertEquals(response.getBody().as(UserDTO.class), user2);
+        UserQueries.deleteUser(user2.getUsername(), 200);
+        UserQueries.getUser(user2.getUsername(), 404);
+
     }
 
     @Test
-    @Order(2)
-    public void testGetUser() {
-        UserUtils.getUser(userDTO().getUsername());
+    public void testGetNotExistUser() {
+        Response response = UserQueries.getUser("notexistName", 404);
+        Assertions.assertEquals(response.jsonPath().get("message"), "User not found");
     }
 
     @Test
-    @Order(3)
-    public void testCreateGetCompareUser() {
-        UserUtils.postUser(userDTO());
-        Response response = UserUtils.getUser(userDTO().getUsername());
-        Assertions.assertEquals(response.getBody().as(UserDTO.class), userDTO());
-
+    public void testDeleteNotExistUser() {
+        UserQueries.deleteUser("notexistName", 404);
     }
 }

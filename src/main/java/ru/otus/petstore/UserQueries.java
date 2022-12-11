@@ -5,7 +5,7 @@ import io.restassured.response.Response;
 
 public class UserQueries {
 
-    public static Response postUser(UserDTO userDto, Integer statusCode) {
+    public Response postUser(UserDTO userDto, Integer statusCode) {
         return RestAssured.given()
                 .spec(UserSpecification.requestSpecification)
                 .body(userDto)
@@ -17,7 +17,7 @@ public class UserQueries {
                 .response();
     }
 
-    public static Response updateUser(String username, UserDTO userDTO, Integer statusCode) {
+    public Response updateUser(String username, UserDTO userDTO, Integer statusCode) {
         return RestAssured.given()
                 .spec(UserSpecification.requestSpecification)
                 .body(userDTO)
@@ -29,7 +29,7 @@ public class UserQueries {
                 .response();
     }
 
-    public static Response getUser(String username, Integer statusCode) {
+    public Response getUser(String username, Integer statusCode) {
         return RestAssured.given()
                 .spec(UserSpecification.requestSpecification)
                 .when()
@@ -40,7 +40,7 @@ public class UserQueries {
                 .response();
     }
 
-    public static Response deleteUser(String username, Integer statusCode) {
+    public Response deleteUser(String username, Integer statusCode) {
         return RestAssured.given()
                 .spec(UserSpecification.requestSpecification)
                 .when()

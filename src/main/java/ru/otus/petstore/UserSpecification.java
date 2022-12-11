@@ -10,7 +10,7 @@ import io.restassured.specification.ResponseSpecification;
 public class UserSpecification {
     static RequestSpecification requestSpecification =
             RestAssured.given()
-                    .baseUri("https://petstore.swagger.io/v2")
+                    .baseUri(System.getProperty("base.url"))
                     .basePath("/user")
                     .contentType(ContentType.JSON)
                     .log().all();
